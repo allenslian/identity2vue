@@ -1,13 +1,21 @@
-import Router from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
 
-
-
-
-const router = Router.createRouter({
-  history: Router.createWebHashHistory(),
+const router = createRouter({
+  history: createWebHashHistory(),
   routes: [
-
-  ], // short for `routes: routes`
+    {
+      path: '/',
+      component: Home
+    },
+    {
+      path: '/login',
+      component: Login
+    }
+  ],
 })
+
+// router.beforeEach()
 
 export default router

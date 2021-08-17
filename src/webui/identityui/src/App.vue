@@ -1,19 +1,25 @@
 <template>
   <div>
-    <img alt="Vue logo" src="./assets/logo.png">
+    <img alt="Vue logo" src="./assets/logo.png" />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: {},
+  setup() {
+    const router = useRouter();
+
+    onMounted(() => {
+      router.push("/login");
+    });
+  },
+};
 </script>
 
 <style>
