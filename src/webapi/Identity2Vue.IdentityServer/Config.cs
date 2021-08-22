@@ -12,7 +12,8 @@ namespace Identity2Vue.IdentityServer
     public static IEnumerable<IdentityResource> IdentityResources =>
         new IdentityResource[]
         {
-          new IdentityResources.OpenId()
+          new IdentityResources.OpenId(),
+          new IdentityResources.Profile()
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>
@@ -26,32 +27,35 @@ namespace Identity2Vue.IdentityServer
         {
           new Client
           {
-            ClientId = "vuejs.client",
-            ClientName = "vuejs.client",
+            ClientId = "webclient.vuejs",
+            ClientName = "webclient.vuejs",
             // AccessTokenType = AccessTokenType.Jwt,
             // RequireConsent = false,
-            AccessTokenLifetime = 300,// 330 seconds, default 60 minutes
-            IdentityTokenLifetime = 300,
+            AccessTokenLifetime = 30,// 330 seconds, default 60 minutes
+            IdentityTokenLifetime = 30,
+            RefreshTokenExpiration = TokenExpiration.Sliding,
+            SlidingRefreshTokenLifetime = 60,
 
             RequireClientSecret = false,
             AllowedGrantTypes = GrantTypes.Code,
             RequirePkce = true,
 
-            AllowAccessTokensViaBrowser = true,
+            // AllowAccessTokensViaBrowser = true,
+            FrontChannelLogoutSessionRequired = true,
+            FrontChannelLogoutUri = "http://localhost:8080/#/sign-out-callback",
+            
             RedirectUris = new List<string>
             {
-                "https://localhost:44357",
-                "https://localhost:44357/callback.html",
-                "https://localhost:44357/silent-renew.html"
+                "http://localhost:8080/#/sign-in-callback",
             },
             PostLogoutRedirectUris = new List<string>
             {
-                "https://localhost:44357/",
-                "https://localhost:44357"
+                "http://localhost:8080/#/sign-out-callback"
             },
+            
             AllowedCorsOrigins = new List<string>
             {
-                "https://localhost:44357"
+                "http://localhost:8080"
             },
             AllowedScopes = new List<string>
             {
