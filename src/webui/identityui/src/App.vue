@@ -1,23 +1,37 @@
 <template>
   <div>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <router-view></router-view>
+    <el-container v-if="isAuthenticated">
+      <router-view></router-view>
+    </el-container>
+    <el-container v-else>
+      <el-button @click="login">Login</el-button>
+    </el-container>
   </div>
 </template>
 
 <script>
-import { onMounted } from "@vue/runtime-core";
-import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "@vue/runtime-core"
+import { useStore } from 'vuex'
+import { useSignInClient } from './composables/useOidcClient'
 
 export default {
   name: "App",
-  components: {},
   setup() {
-    const router = useRouter();
+    const {login, renewToken, revokeToken } = useSignInClient()
+    const store = useStore()
+    let username = ref('')
 
     onMounted(() => {
-      router.push("/login");
-    });
+      console.log("onMounted is invoked!")
+    })
+
+    return {
+      isAuthenticated: computed(() => store.getters.isAuthenticated),
+      username,
+      login,
+      renewToken,
+      revokeToken
+    }
   },
 };
 </script>
@@ -29,6 +43,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  /*
   margin-top: 60px;
+  */
 }
 </style>

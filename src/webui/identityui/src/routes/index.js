@@ -1,17 +1,28 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
+import Callback from '../views/Callback.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
+      name: 'home',
       path: '/',
       component: Home
     },
     {
-      path: '/login',
-      component: Login
+      path: '/home',
+      redirect: {
+        name: 'home'
+      },
+    },
+    {
+      path: '/sign-in-callback',
+      component: Callback
+    },
+    {
+      path: '/sign-out-callback',
+      component: Callback
     }
   ],
 })
