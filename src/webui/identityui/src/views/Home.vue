@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <el-container>
     <el-container>
       <el-header>
         <el-row>
-          <el-col :span="12"> </el-col>
+          <el-col :span="12">{{ isAuthenticated }}</el-col>
           <el-col :span="12" :offset="6">
             <el-menu mode="horizontal">
-              <el-submenu index="1" :title="username">
+              <el-submenu index="1" :title="currentUser ? currentUser.name : 'None'">
                 <el-menu-item index="1" @click="logout">Logout</el-menu-item>
               </el-submenu>
             </el-menu>
@@ -31,23 +31,27 @@
         </el-main>
       </el-container>
     </el-container>
-  </div>
+  </el-container>
 </template>
 
 <script>
-import { onMounted } from "@vue/runtime-core"
+import { computed, onMounted } from "@vue/runtime-core"
+import { useStore } from 'vuex'
 import { useSignInClient } from '../composables/useOidcClient'
 
 export default {
   name: "Home",
   setup() {
     const { logout } = useSignInClient()
+    const store = useStore()
 
     onMounted(() => {
       console.log("onMounted is invoked!")
     })
 
     return {
+      isAuthenticated: computed(() => store.getters.isAuthenticated),
+      currentUser: computed(() => store.getters.currentUser),
       logout
     }
   },

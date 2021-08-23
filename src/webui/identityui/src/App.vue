@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "@vue/runtime-core"
+import { computed, onMounted } from "@vue/runtime-core"
 import { useStore } from 'vuex'
 import { useSignInClient } from './composables/useOidcClient'
 
@@ -19,7 +19,6 @@ export default {
   setup() {
     const {login, renewToken, revokeToken } = useSignInClient()
     const store = useStore()
-    let username = ref('')
 
     onMounted(() => {
       console.log("onMounted is invoked!")
@@ -27,7 +26,6 @@ export default {
 
     return {
       isAuthenticated: computed(() => store.getters.isAuthenticated),
-      username,
       login,
       renewToken,
       revokeToken
