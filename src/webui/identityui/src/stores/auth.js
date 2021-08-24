@@ -1,8 +1,6 @@
-
-const authentication = {
+export const authentication = {
     state: () => ({
-        userId: '',
-        username: '',
+        user: {},
         tokenType: 'Bearer',
         accessToken: '',
         accessTokenExpiry: 0,
@@ -11,18 +9,18 @@ const authentication = {
     }),
     getters: {
         isAuthenticated(state) {
-            state.accessToken = localStorage.getItem('oidc.user.accessToken')
-            state.accessTokenExpiry = parseInt(localStorage.getItem('oidc.user.accessTokenExpiry'))
-            return state.accessToken !== '' && state.accessTokenExpiry < new Date().getTime() / 1000
+            if (state.idToken) {
+                return true
+            }
+            return false
         },
 
         currentUser(state) {
-            state.userId = localStorage.getItem('oidc.user.id')
-            state.username = localStorage.getItem('oidc.user.name')
-            return {
-                id: state.userId,
-                name: state.username
-            }
+            return state.user
+        },
+
+        tokenType(state) {
+            return state.tokenType
         },
 
         accessToken(state) {
@@ -30,19 +28,36 @@ const authentication = {
         }
     },
     mutations: {
-        saveToken(_state, payload) {
+        saveTokens(state, payload) {
             console.log(payload)
-            localStorage.setItem('oidc.user.id', payload.profile.sub)
-            localStorage.setItem('oidc.user.name', payload.profile.name)
-            localStorage.setItem('oidc.user.tokenType', payload.token_type)
-            localStorage.setItem('oidc.user.accessToken', payload.access_token ? payload.access_token : '')
-            localStorage.setItem('oidc.user.accessTokenExpiry', payload.expires_at)
-            localStorage.setItem('oidc.user.refreshToken', payload.refresh_token ? payload.refresh_token : '')
-            localStorage.setItem('oidc.user.idToken', payload.id_token)
+            // localStorage.setItem('oidc.user.id', payload.profile.sub)
+            // localStorage.setItem('oidc.user.name', payload.profile.name)
+            // localStorage.setItem('oidc.user.tokenType', payload.token_type)
+            // localStorage.setItem('oidc.user.accessToken', payload.access_token ? payload.access_token : '')
+            // localStorage.setItem('oidc.user.accessTokenExpiry', payload.expires_at)
+            // localStorage.setItem('oidc.user.refreshToken', payload.refresh_token ? payload.refresh_token : '')
+            // localStorage.setItem('oidc.user.idToken', payload.id_token)
+
+            state.user.id = payload.profile.sub
+            state.user.name = payload.profile.name
+            state.tokenType = payload.token_type
+            state.accessToken = payload.access_token ? payload.access_token : ''
+            state.accessTokenExpiry = payload.expires_at
+            state.idToken = payload.id_token ? payload.id_token : ''
+            state.refreshToken = payload.refresh_token ? payload.refresh_token : ''
+        },
+
+        clearTokens(state) {
+            state.user = {}
+            state.accessToken = ''
+            state.accessTokenExpiry = 0
+            state.idToken = ''
+            state.refreshToken = ''
         }
     },
-}
-
-export {
-    authentication
+    actions: {
+        authenticate(state, user) {
+            state.commit('saveTokens', user)
+        }
+    }
 }

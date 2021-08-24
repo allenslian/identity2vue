@@ -1,47 +1,38 @@
-import { UserManager, WebStorageStateStore } from 'oidc-client'
+import { UserManager } from 'oidc-client'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
-export function useSignInClient() {
-    const authority = 'https://localhost:5001'
-    const settings = {
-      userStore: new WebStorageStateStore({ store: window.localStorage }),
-      authority: authority,
-      client_id: 'webclient.vuejs',
-      redirect_uri: window.location.origin + '/#/sign-in-callback',
-      post_logout_redirect_uri: window.location.origin + '/#/sign-out-callback',
-      front_channel_logout_uri: window.location.origin + '/#/sign-out-callback',
-      
-      response_type: 'code',
-      scope: 'openid profile platform.api',
-
-      silent_redirect_uri: window.location.origin + '/#/silent-callback',
-      automaticSilentRenew: true,
-      
-      revokeAccessTokenOnSignout: true,
-      filterProtocolClaims: false
-    }
+export function useSignInClient(settings) {
     const mgr = new UserManager(settings)
     mgr.events.addUserLoaded(user => {
         console.log('User loaded')
         console.log(user)
     })
+
     mgr.events.addUserUnloaded(() => {
         console.log('User logged out locally')
-    });
+    })
+
     mgr.events.addAccessTokenExpiring(() => {
         console.log("Access token expiring...")
-    });
+    })
+    
+    mgr.events.addAccessTokenExpired(() => {
+
+    })
+
     mgr.events.addSilentRenewError(err => {
         console.log("Silent renew error: " + err.message)
-    });
+    })
+
     mgr.events.addUserSignedIn((e) => {
         console.log("user logged in to the token server")
         console.log(e)
-    });
+    })
+
     mgr.events.addUserSignedOut(() => {
         console.log("User signed out of OP")
-    });
+    })
     
     const login = () => {
         console.log("User signs in redirectly!")
@@ -88,7 +79,7 @@ export function useSignInCallbackClient() {
     const signInCallback = () => {
         console.log('signInCallback invoked!')
         mgr.signinRedirectCallback().then(user => {
-            store.commit('saveToken', user)
+            store.commit('saveTokens', user)
             router.replace({ path: '/' })
         })
     }
