@@ -29,10 +29,11 @@ namespace Identity2Vue.IdentityServer
           {
             ClientId = "webclient.vuejs",
             ClientName = "webclient.vuejs",
-            // AccessTokenType = AccessTokenType.Jwt,
-            // RequireConsent = false,
-            AccessTokenLifetime = 30,// 330 seconds, default 60 minutes
-            IdentityTokenLifetime = 30,
+            AccessTokenType = AccessTokenType.Jwt,
+            RequireConsent = false,
+            AccessTokenLifetime = 60,// 330 seconds, default 60 minutes
+            UpdateAccessTokenClaimsOnRefresh = true,
+            // IdentityTokenLifetime = 30,
             RefreshTokenExpiration = TokenExpiration.Sliding,
             SlidingRefreshTokenLifetime = 60,
 

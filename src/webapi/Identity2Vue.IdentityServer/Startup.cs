@@ -37,7 +37,7 @@ namespace Identity2Vue.IdentityServer
                 options.Events.RaiseSuccessEvents = true;
 
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                options.EmitStaticAudienceClaim = true;
+                options.EmitStaticAudienceClaim = true;                
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
@@ -45,11 +45,11 @@ namespace Identity2Vue.IdentityServer
             .AddCredential(Configuration["Credentials:RsaPrivateKey"])
             .AddUserStore<UserStore>();
 
-            // services.AddAuthentication("Cookie")
-            //   .AddCookie("Cookie", options =>
-            //   {
-
-            //   });
+            services.AddAuthentication("Cookie")
+              .AddCookie("Cookie", options =>
+              {
+                  options.ExpireTimeSpan = System.TimeSpan.FromMinutes(60);
+              });
 
             services.AddCors(options =>
             {

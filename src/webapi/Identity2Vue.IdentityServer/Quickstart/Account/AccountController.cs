@@ -126,6 +126,14 @@ namespace IdentityServerHost.Quickstart.UI
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                         };
+                    }
+                    else
+                    {
+                        props = new AuthenticationProperties
+                        {
+                            IsPersistent = false,
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(60))
+                        };
                     };
 
                     // issue authentication cookie with subject ID and username

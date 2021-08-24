@@ -1,4 +1,5 @@
 using System.Linq;
+using Identity2Vue.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +35,8 @@ namespace Identity2Vue.WebApi
             options.Authority = Configuration["JwtToken:Authority"];
             options.TokenValidationParameters = new TokenValidationParameters
             {
-              ValidateAudience = false
+              ValidateAudience = false,
+              ClockSkew = System.TimeSpan.Zero
             };
           });
 
@@ -47,6 +49,17 @@ namespace Identity2Vue.WebApi
           {
             return null != ctx.User.Claims.FirstOrDefault(c => c.Type == "scope" && c.Value == "platform.api");
           });
+        });
+      });
+
+      services.AddScoped<IProductService, ProductService>();
+
+      services.AddCors(options => {
+        options.AddDefaultPolicy(policy => {
+          policy.WithOrigins("http://localhost:8080")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .Build();
         });
       });
     }
@@ -64,6 +77,7 @@ namespace Identity2Vue.WebApi
       app.UseHttpsRedirection();
 
       app.UseRouting();
+      app.UseCors();
 
       app.UseAuthentication();
       app.UseAuthorization();
