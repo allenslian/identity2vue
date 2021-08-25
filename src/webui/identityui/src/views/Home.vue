@@ -1,81 +1,108 @@
 <template>
   <el-container>
-    <el-aside width="200px">
-      <el-menu :default-openeds="['1']">
-        <el-submenu index="1">
-          <template #title><i class="el-icon-message"></i>Home</template>
-          <el-menu-item-group>
-            <template #title>Group 1</template>
-            <el-menu-item index="1-1">Option 1</el-menu-item>
-            <el-menu-item index="1-2">Option 2</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-      </el-menu>
-    </el-aside>
-    <el-main>
-      <el-button @click="getProducts">load products</el-button>
-      <el-button @click="addProduct">add product</el-button>
-    </el-main>
+    <el-header>
+      <el-row align="middle">
+        <el-col :span="12">
+          <h3 class="title">Hello</h3>
+        </el-col>
+        <el-col :span="12">
+          <el-button
+            type="primary"
+            plain
+            class="nav"
+            @click="login"
+            v-if="!isAuthenticated"
+            >LOGIN</el-button
+          >
+          <el-menu class="nav" mode="horizontal" v-else>
+            <el-submenu index="1">
+              <template #title>{{ profile ? profile.name : "NONE" }}</template>
+              <el-menu-item index="1-1" @click="logout">LOGOUT</el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-main> Some data are shown!!! </el-main>
   </el-container>
 </template>
 
 <script>
-import { ref, onMounted } from "@vue/runtime-core"
-import { useStore } from 'vuex'
-import axios from "axios"
+import { onMounted, computed } from "@vue/runtime-core";
+import { useStore } from "vuex";
+import { oidcSettings } from "../config/index";
+import { useSignInClient } from "../composables/useOidcClient";
 
 export default {
   name: "Home",
-  setup() {
-    const store = useStore()
-    const products = ref([])
-    const getProducts = () => {
-      axios.get('https://localhost:6001/products', {
-        headers: {
-          'Authorization': store.getters.tokenType + ' ' + store.getters.accessToken
-        }
-      }).then(res => {
-        console.log(res)
-        res.data.forEach(item => {
-          products.value.push(item)
-        })
-      })
-    }
 
-    const addProduct = () => {
-      axios.post('https://localhost:6001/products', {
-        name: 'product a',
-        description: 'a product called a',
-        salesPrice: 11.00
-      }, {
-        headers: {
-          'Authorization': store.getters.tokenType + ' ' + store.getters.accessToken
-        }
-      }).then(res => {
-        console.log(res)
-      }).catch(err => {
-        if (err.response) {
-          const res = err.response
-          
-          console.log(res.data)
-          console.log(res.status)
-          console.log(res.headers)
-        }
-      })
-    }
+  setup() {
+    const store = useStore();
+    const mgr = useSignInClient(oidcSettings);
+    // const products = ref([])
+    // const getProducts = () => {
+    //   axios.get('https://localhost:6001/products', {
+    //     headers: {
+    //       'Authorization': store.getters.tokenType + ' ' + store.getters.accessToken
+    //     }
+    //   }).then(res => {
+    //     console.log(res)
+    //     res.data.forEach(item => {
+    //       products.value.push(item)
+    //     })
+    //   })
+    // }
+
+    // const addProduct = () => {
+    //   axios.post('https://localhost:6001/products', {
+    //     name: 'product a',
+    //     description: 'a product called a',
+    //     salesPrice: 11.00
+    //   }, {
+    //     headers: {
+    //       'Authorization': store.getters.tokenType + ' ' + store.getters.accessToken
+    //     }
+    //   }).then(res => {
+    //     console.log(res)
+    //   }).catch(err => {
+    //     if (err.response) {
+    //       const res = err.response
+
+    //       console.log(res.data)
+    //       console.log(res.status)
+    //       console.log(res.headers)
+    //     }
+    //   })
+    // }
+
+    const login = () => {
+      mgr.login();
+    };
+
+    const logout = () => {
+      mgr.logout();
+    };
 
     onMounted(() => {
       console.log("Home onMounted is invoked!");
     });
 
     return {
-      getProducts,
-      addProduct,
-      products
+      isAuthenticated: computed(() => store.getters.isAuthenticated),
+      profile: computed(() => store.getters.profile),
+      login,
+      logout,
     };
   },
 };
 </script>
 
-<style>
+<style scoped>
+.title {
+  text-align: left;
+}
+
+.nav {
+  float: right;
+}
 </style>

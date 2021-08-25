@@ -1,58 +1,45 @@
 export const authentication = {
     state: () => ({
-        user: {},
-        tokenType: 'Bearer',
-        accessToken: '',
-        accessTokenExpiry: 0,
-        refreshToken: '',
-        idToken: ''
+        profile: null,
+        tokens: null
     }),
+
     getters: {
         isAuthenticated(state) {
-            if (state.idToken) {
+            if (state.tokens && state.tokens.idToken) {
                 return true
             }
             return false
         },
 
-        currentUser(state) {
-            return state.user
+        profile(state) {
+            return state.profile
         },
 
-        tokenType(state) {
-            return state.tokenType
-        },
-
-        accessToken(state) {
-            return state.accessToken
+        tokens(state) {
+            return state.tokens
         }
     },
+
     mutations: {
         saveTokens(state, payload) {
-            console.log(payload)
-            // localStorage.setItem('oidc.user.id', payload.profile.sub)
-            // localStorage.setItem('oidc.user.name', payload.profile.name)
-            // localStorage.setItem('oidc.user.tokenType', payload.token_type)
-            // localStorage.setItem('oidc.user.accessToken', payload.access_token ? payload.access_token : '')
-            // localStorage.setItem('oidc.user.accessTokenExpiry', payload.expires_at)
-            // localStorage.setItem('oidc.user.refreshToken', payload.refresh_token ? payload.refresh_token : '')
-            // localStorage.setItem('oidc.user.idToken', payload.id_token)
+            state.profile = {
+                id: payload.profile.sub,
+                name: payload.profile.name
+            }
 
-            state.user.id = payload.profile.sub
-            state.user.name = payload.profile.name
-            state.tokenType = payload.token_type
-            state.accessToken = payload.access_token ? payload.access_token : ''
-            state.accessTokenExpiry = payload.expires_at
-            state.idToken = payload.id_token ? payload.id_token : ''
-            state.refreshToken = payload.refresh_token ? payload.refresh_token : ''
+            state.tokens = {
+                tokenType: payload.token_type,
+                idToken: payload.id_token ? payload.id_token : '',
+                accessToken: payload.access_token ? payload.access_token : '',
+                accessTokenExpiry: payload.expires_at,
+                refreshToken: payload.refresh_token ? payload.refresh_token : ''
+            }
         },
 
         clearTokens(state) {
-            state.user = {}
-            state.accessToken = ''
-            state.accessTokenExpiry = 0
-            state.idToken = ''
-            state.refreshToken = ''
+            state.user = null
+            state.tokens = null
         }
     },
     actions: {

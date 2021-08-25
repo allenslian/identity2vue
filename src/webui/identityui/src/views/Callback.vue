@@ -1,6 +1,5 @@
 <template>
-  <el-alert title="Processing callback..." type="info" effect="dark">
-  </el-alert>
+  <el-alert title="Processing callback..." type="info" effect="dark"></el-alert>
 </template>
 
 <script>
@@ -10,9 +9,9 @@ import { useSignInCallbackClient } from "../composables/useOidcClient";
 export default {
   name: "Callback",
   setup() {
-    const { signInCallback } = useSignInCallbackClient();
+    const { signInCallback } = useSignInCallbackClient()
     onMounted(() => {
-      console.log('callback -> on mounted');
+      console.log('Callback onMounted is invoked!')
       signInCallback();
     });
   },

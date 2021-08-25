@@ -84,3 +84,12 @@ export function useSignInCallbackClient() {
         signInCallback
     }
 }
+
+export function getUser() {
+    const getUser = async () => {
+        return await mgr.getUser()
+    }
+    return {
+        getUser
+    }
+}

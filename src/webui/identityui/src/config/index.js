@@ -1,4 +1,6 @@
-import { WebStorageStateStore } from 'oidc-client'
+import {
+    WebStorageStateStore
+} from 'oidc-client'
 
 const authority = 'https://localhost:5001'
 
@@ -15,9 +17,13 @@ export const oidcSettings = {
     response_type: 'code',
     scope: 'openid profile platform.api',
 
-    silent_redirect_uri: window.location.origin + '/#/silent-callback',
+    silent_redirect_uri: window.location.origin + '/silent-callback.html',
     automaticSilentRenew: true,
+    accessTokenExpiringNotificationTime: 10,
 
     revokeAccessTokenOnSignout: true,
-    filterProtocolClaims: false
+
+    loadUserInfo: true,
+    filterProtocolClaims: true,
+    response_mode: 'query'
 }
