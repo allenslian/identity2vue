@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using Identity2Vue.WebApi.Services;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,14 +32,14 @@ namespace Identity2Vue.WebApi
       });
 
       services.AddAuthentication("Bearer")
-          .AddJwtBearer("Bearer", options =>
+          .AddIdentityServerAuthentication(options =>
           {
             options.Authority = Configuration["JwtToken:Authority"];
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-              ValidateAudience = false,
-              ClockSkew = System.TimeSpan.Zero
-            };
+            options.EnableCaching = true;
+            options.SaveToken = true;
+            options.ApiName = "platform.api";
+            options.JwtValidationClockSkew = TimeSpan.Zero;
+            options.SupportedTokens = SupportedTokens.Both;
           });
 
       services.AddAuthorization(options =>

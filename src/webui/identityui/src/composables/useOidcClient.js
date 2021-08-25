@@ -1,9 +1,11 @@
 import { UserManager } from 'oidc-client'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { oidcSettings } from '../config'
 
-export function useSignInClient(settings) {
-    const mgr = new UserManager(settings)
+const mgr = new UserManager(oidcSettings)
+
+export function useSignInClient() {
     mgr.events.addUserLoaded(user => {
         console.log('User loaded')
         console.log(user)
@@ -67,12 +69,6 @@ export function useSignInClient(settings) {
 }
 
 export function useSignInCallbackClient() {
-    const settings = {
-        loadUserInfo: true,
-        filterProtocolClaims: true,
-        response_mode: 'query'
-    }
-    const mgr = new UserManager(settings)
     const router = useRouter()
     const store = useStore()
 
@@ -80,7 +76,7 @@ export function useSignInCallbackClient() {
         console.log('signInCallback invoked!')
         mgr.signinRedirectCallback().then(user => {
             store.commit('saveTokens', user)
-            router.replace({ path: '/' })
+            router.replace({ path: '/workspace' })
         })
     }
 

@@ -19,7 +19,7 @@ namespace Identity2Vue.IdentityServer
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-          new ApiScope("platform.api", "platform api")
+          new ApiScope("platform.api", "platform api"),
         };
 
     public static IEnumerable<Client> Clients =>
@@ -29,13 +29,15 @@ namespace Identity2Vue.IdentityServer
           {
             ClientId = "webclient.vuejs",
             ClientName = "webclient.vuejs",
+            AllowOfflineAccess = true,
             AccessTokenType = AccessTokenType.Jwt,
             RequireConsent = false,
-            AccessTokenLifetime = 60,// 330 seconds, default 60 minutes
+            AccessTokenLifetime = 60,
             UpdateAccessTokenClaimsOnRefresh = true,
             // IdentityTokenLifetime = 30,
             RefreshTokenExpiration = TokenExpiration.Sliding,
-            SlidingRefreshTokenLifetime = 60,
+            RefreshTokenUsage = TokenUsage.OneTimeOnly,
+            SlidingRefreshTokenLifetime = 300,
 
             RequireClientSecret = false,
             AllowedGrantTypes = GrantTypes.Code,
@@ -48,6 +50,7 @@ namespace Identity2Vue.IdentityServer
             RedirectUris = new List<string>
             {
                 "http://localhost:8080/#/sign-in-callback",
+                "http://localhost:8080/silent-callback.html"
             },
             PostLogoutRedirectUris = new List<string>
             {

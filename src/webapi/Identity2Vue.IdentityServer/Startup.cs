@@ -6,6 +6,7 @@ using Identity2Vue.IdentityServer.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,31 +38,22 @@ namespace Identity2Vue.IdentityServer
                 options.Events.RaiseSuccessEvents = true;
 
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                options.EmitStaticAudienceClaim = true;                
+                options.EmitStaticAudienceClaim = false;
+
+                //options.UserInteraction.LoginUrl = "/Home/Login";
+                //options.UserInteraction.LogoutUrl = "/Home/Logout";
+
+                options.Csp.Level = IdentityServer4.Models.CspLevel.One;
+                options.Csp.AddDeprecatedHeader = true;
+
+                //options.Authentication.RequireCspFrameSrcForSignout = true;
+                options.Authentication.CookieLifetime = System.TimeSpan.FromMinutes(60);
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
             .AddCredential(Configuration["Credentials:RsaPrivateKey"])
             .AddUserStore<UserStore>();
-
-            services.AddAuthentication("Cookie")
-              .AddCookie("Cookie", options =>
-              {
-                  options.ExpireTimeSpan = System.TimeSpan.FromMinutes(60);
-              });
-
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy.WithOrigins(
-                      "http://localhost:8080"
-                    )
-                    .AllowAnyHeader()
-                    .WithMethods("GET", "POST");
-                });
-            });
         }
 
         public void Configure(IApplicationBuilder app)
