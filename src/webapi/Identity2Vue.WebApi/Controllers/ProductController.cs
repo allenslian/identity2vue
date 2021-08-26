@@ -24,6 +24,7 @@ namespace Identity2Vue.WebApi.Controllers
     }
 
     [HttpGet, Route("")]
+    [Authorize(Policy = "platform.scopes")]
     public async Task<IActionResult> GetProductsAsync()
     {
       return Ok(await _service.GetProductsAsync());

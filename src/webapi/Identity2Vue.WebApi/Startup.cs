@@ -32,14 +32,16 @@ namespace Identity2Vue.WebApi
       });
 
       services.AddAuthentication("Bearer")
-          .AddIdentityServerAuthentication(options =>
+          .AddJwtBearer("Bearer", options =>
           {
             options.Authority = Configuration["JwtToken:Authority"];
-            options.EnableCaching = true;
+            // options.AutomaticRefreshInterval = TimeSpan.FromSeconds(10);
+            options.RequireHttpsMetadata = true;
+            options.MapInboundClaims = false;
+            options.TokenValidationParameters = new TokenValidationParameters{
+              ValidateAudience = false,
+            };
             options.SaveToken = true;
-            options.ApiName = "platform.api";
-            options.JwtValidationClockSkew = TimeSpan.Zero;
-            options.SupportedTokens = SupportedTokens.Both;
           });
 
       services.AddAuthorization(options =>
