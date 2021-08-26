@@ -1,7 +1,43 @@
 import axios from 'axios'
 
+export default function (store) {
+    const instance = axios.create({
+        baseURL: 'https://localhost:6001',
+    })
 
-axios.interceptors.request.use(config => {
-    
+    instance.interceptors.request.use(config => {
+        if (store.getters.isAuthenticated) {
+            config.headers['Authorization'] =
+                `${store.getters.tokens.tokenType} ${store.getters.tokens.accessToken}`
+        }
 
-})
+        if (!config.headers['Content-Type']) {
+            config.headers['Content-Type'] = 'application/json; charset=utf-8'
+        }
+        return config
+    }, error => {
+        console.error('request interceptor error=>' + JSON.stringify(error))
+        return Promise.reject(error)
+    })
+
+    instance.interceptors.response.use(res => {
+        return Promise.resolve(res.data)
+    }, error => {
+        console.error('response interceptor error=>' + JSON.stringify(error))
+        if (error.response) {
+            store.dispatch('notifyError', {
+                code: error.response.status,
+                message: error.response.data,
+                metadata: {
+                    method: error.response.config.method,
+                }
+            })
+        } else if (error.request) {
+            store.dispatch('notifyError', 'The request failed!')
+        } else {
+            store.dispatch('notifyError', error.message)
+        }
+    })
+
+    return instance
+}

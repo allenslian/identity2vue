@@ -19,7 +19,17 @@ const router = createRouter({
     {
       name: 'workspace',
       path: '/workspace',
-      component: () => import(/* webpackChunkName: "workspace" */ '../views/Workspace.vue')
+      component: () => import(/* webpackChunkName: "workspace" */ '../views/Workspace.vue'),
+      children: [
+        {
+          path: '/products',
+          name: 'productList',
+          component: () => import(/* webpackChunkName: "workspace" */ '../views/products/ProductList.vue'),
+          meta: {
+            requireAuth: true
+          }
+        }
+      ]
     },
     {
       path: '/sign-in-callback',

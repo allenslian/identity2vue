@@ -1,34 +1,16 @@
 <template>
   <el-container>
     <el-header>
-      <el-row align="middle">
-        <el-col :span="12">
-          <h3 class="title">Hello</h3>
-        </el-col>
-        <el-col :span="12">
-          <el-button
-            type="primary"
-            plain
-            class="nav"
-            @click="login"
-            v-if="!isAuthenticated"
-            >LOGIN</el-button
-          >
-          <el-menu class="profile-button" mode="horizontal" v-else>
-            <el-submenu index="1">
-              <template #title>{{ profile ? profile.name : "NONE" }}</template>
-              <el-menu-item index="1-1" @click="logout">LOGOUT</el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </el-col>
-      </el-row>
+      <current-user></current-user>
     </el-header>
     <el-container>
       <el-aside>
         <el-menu class="left-navbar" mode="vertical">
           <el-submenu index="1">
             <template #title>Product Management</template>
-            <el-menu-item index="1-1">Product List</el-menu-item>
+            <el-menu-item index="1-1" @click="navigateToProductList"
+              >Product List</el-menu-item
+            >
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -40,21 +22,27 @@
 </template>
 
 <script>
-import { onMounted, computed } from "@vue/runtime-core";
-import { useStore } from "vuex";
+import { onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
+import CurrentUser from "../components/CurrentUser.vue";
 
 export default {
   name: "Workspace",
+  components: {
+    "current-user": CurrentUser,
+  },
   setup() {
-    const store = useStore();
+    const router = useRouter();
+    const navigateToProductList = () => {
+      router.push({ path: "/products" });
+    };
 
     onMounted(() => {
       console.log("Workspace onMounted is invoked!");
     });
 
     return {
-      isAuthenticated: computed(() => store.getters.isAuthenticated),
-      profile: computed(() => store.getters.profile),
+      navigateToProductList,
     };
   },
 };
@@ -62,12 +50,12 @@ export default {
 
 <style>
 .title {
-    float: left;
+  float: left;
 }
 
 .profile-button {
-    float: right;
-    width: 240px;
+  float: right;
+  width: 240px;
 }
 
 .left-navbar {

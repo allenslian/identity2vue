@@ -3,7 +3,6 @@ import {
 } from 'oidc-client'
 
 const authority = 'https://localhost:5001'
-
 export const oidcSettings = {
     userStore: new WebStorageStateStore({
         store: window.localStorage
@@ -27,3 +26,4 @@ export const oidcSettings = {
     filterProtocolClaims: true,
     response_mode: 'query'
 }
+
