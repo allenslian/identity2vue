@@ -3,4 +3,5 @@
 [Oo]bj/
 
 *.suo
-
+*.code-workspace
+*.lock

@@ -47,6 +47,7 @@ export const authentication = {
             state.isAuthenticated = false
             state.user = null
             state.tokens = null
+            state.error = null
         },
 
         notifyError(state, payload) {
@@ -107,11 +108,43 @@ export const authentication = {
     },
 
     actions: {
-        notifyError(state, message) {
+        notifyError({
+            commit
+        }, message) {
             if (message === null) {
                 return
             }
-            state.commit('notifyError', message)
+            commit('notifyError', message)
+        },
+
+        saveTokens({
+            commit
+        }, user) {
+            if (user === null) {
+                return
+            }
+
+            return new Promise((resolve, reject) => {
+                try {
+                    commit('saveTokens', user)
+                    resolve()
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        },
+
+        clearTokens({
+            commit
+        }) {
+            return new Promise((resolve, reject) => {
+                try {
+                    commit('clearTokens')
+                    resolve()
+                } catch (error) {
+                    reject(error)
+                }
+            })
         }
     }
 }

@@ -7,17 +7,19 @@ import {
 
 let mgr = null
 
-export function useOidcClient(router, store) {
+export function useOidcClient(router, {
+    dispatch
+}) {
     if (mgr == null) {
         mgr = new UserManager(oidcSettings)
         mgr.events.addUserLoaded(user => {
             console.log('User loaded!' + JSON.stringify(user))
-            store.commit('saveTokens', user)
+            dispatch('saveTokens', user)
         })
 
         mgr.events.addUserUnloaded(() => {
             console.log('User unloaded!')
-            store.commit('clearTokens')
+            dispatch('clearTokens')
         })
 
         mgr.events.addAccessTokenExpiring(() => {
@@ -26,12 +28,12 @@ export function useOidcClient(router, store) {
 
         mgr.events.addAccessTokenExpired(() => {
             console.log("Access token expired.")
-            store.commit('clearTokens')
+            dispatch('clearTokens')
         })
 
         mgr.events.addSilentRenewError(err => {
             console.error("Silent renew error=>" + JSON.stringify(err))
-            store.dispatch('notifyError', {
+            dispatch('notifyError', {
                 code: 401,
                 message: '重新获取access token失败，请重新登录!',
                 metadata: {
@@ -60,19 +62,25 @@ export function useOidcClient(router, store) {
     }
 
     const loginCallback = () => {
-        console.log("User signs in callback!")
         mgr.signinRedirectCallback().then(() => {
             mgr.getUser().then(user => {
                 if (user !== null) {
-                    store.commit('saveTokens', user)
-                    router.replace({
-                        path: '/workspace'
+                    console.log("User signs in callback!")
+                    dispatch('saveTokens', user).then(() => {
+                        router.replace({
+                            path: '/workspace'
+                        })
                     })
                 } else {
                     router.replace({
                         path: '/'
                     })
                 }
+            })
+        }).catch(err => {
+            console.error('signinRedirectCallback=>' + JSON.stringify(err))
+            router.replace({
+                path: '/'
             })
         })
     }

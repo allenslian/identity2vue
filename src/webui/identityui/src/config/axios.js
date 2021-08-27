@@ -23,8 +23,9 @@ export default function (store) {
     instance.interceptors.response.use(res => {
         return Promise.resolve(res.data)
     }, error => {
-        console.error('response interceptor error=>' + JSON.stringify(error))
+        console.log('response interceptor error=>')
         if (error.response) {
+            console.error(error.response)
             store.dispatch('notifyError', {
                 code: error.response.status,
                 message: error.response.data,
@@ -33,8 +34,10 @@ export default function (store) {
                 }
             })
         } else if (error.request) {
+            console.error(error.request)
             store.dispatch('notifyError', 'The request failed!')
         } else {
+            console.error(error)
             store.dispatch('notifyError', error.message)
         }
     })

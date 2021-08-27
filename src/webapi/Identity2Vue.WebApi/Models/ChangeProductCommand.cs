@@ -1,7 +1,11 @@
+using System;
+
 namespace Identity2Vue.WebApi.Models
 {
-    public class CreateProductCommand
+    public class ChangeProductCommand
     {
+        public Guid Id { get; set; }
+        
         public string Name { get; set; }
 
         public string Description { get; set; }

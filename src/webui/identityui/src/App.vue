@@ -22,7 +22,7 @@
 import { onMounted, onUnmounted, reactive } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
-//import debounce from "lodash.debounce"
+import debounce from "lodash.debounce"
 
 export default {
   name: "App",
@@ -41,23 +41,19 @@ export default {
         router.replace({ path: "/" });
       }
     };
-
-    const watcher = store.watch(
+    
+    const unwatch = store.watch(
       (_state, getters) => getters.error,
       (_ov, nv) => {
         if (nv == null) {
           return
         }
         console.log(nv)
-        // debounce(() => {
-        //   dialog.title = nv ? "错误提示" : "提示";
-        //   dialog.message = nv ? nv.message : "";
-        //   dialog.isVisible = true;
-        // }, 500)
-
-        dialog.title = nv ? "错误提示" : "提示"
-        dialog.message = nv ? nv.message : ""
-        dialog.isVisible = true
+        debounce(() => {
+          dialog.title = nv ? "错误提示" : "提示";
+          dialog.message = nv ? nv.message : "";
+          dialog.isVisible = true;
+        }, 500)()
       }
     );
 
@@ -67,7 +63,7 @@ export default {
 
     onUnmounted(() => {
       console.log("App onUnmounted is invoked!");
-      watcher();
+      unwatch();
     });
 
     return {
@@ -83,9 +79,10 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  
   color: #2c3e50;
   /*
+  text-align: center;
   margin-top: 60px;
   */
 }
