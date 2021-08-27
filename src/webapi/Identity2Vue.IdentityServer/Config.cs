@@ -20,6 +20,7 @@ namespace Identity2Vue.IdentityServer
         new ApiScope[]
         {
           new ApiScope("platform.api", "platform api"),
+          new ApiScope("offline_access", "offline access")
         };
 
     public static IEnumerable<Client> Clients =>
@@ -34,16 +35,17 @@ namespace Identity2Vue.IdentityServer
             RequireConsent = false,
             AccessTokenLifetime = 60,
             UpdateAccessTokenClaimsOnRefresh = true,
-            // IdentityTokenLifetime = 30,
+            IdentityTokenLifetime = 60,
             RefreshTokenExpiration = TokenExpiration.Sliding,
-            RefreshTokenUsage = TokenUsage.OneTimeOnly,
-            SlidingRefreshTokenLifetime = 300,
+            RefreshTokenUsage = TokenUsage.ReUse,
+            AbsoluteRefreshTokenLifetime = 360,
+            SlidingRefreshTokenLifetime = 180,
 
             RequireClientSecret = false,
             AllowedGrantTypes = GrantTypes.Code,
             RequirePkce = true,
 
-            // AllowAccessTokensViaBrowser = true,
+            AllowAccessTokensViaBrowser = true,
             FrontChannelLogoutSessionRequired = true,
             FrontChannelLogoutUri = "http://localhost:8080/#/sign-out-callback",
             
@@ -56,7 +58,6 @@ namespace Identity2Vue.IdentityServer
             {
                 "http://localhost:8080/#/sign-out-callback"
             },
-            
             AllowedCorsOrigins = new List<string>
             {
                 "http://localhost:8080"
@@ -65,7 +66,8 @@ namespace Identity2Vue.IdentityServer
             {
                 "openid",
                 "profile",
-                "platform.api"
+                "platform.api",
+                "offline_access"
             }
           }
         };

@@ -48,6 +48,8 @@ namespace Identity2Vue.IdentityServer
 
                 //options.Authentication.RequireCspFrameSrcForSignout = true;
                 options.Authentication.CookieLifetime = System.TimeSpan.FromMinutes(60);
+                options.Authentication.CookieSlidingExpiration = true;
+                options.Authentication.CookieSameSiteMode = SameSiteMode.None;
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)

@@ -40,6 +40,7 @@ namespace Identity2Vue.WebApi
             options.MapInboundClaims = false;
             options.TokenValidationParameters = new TokenValidationParameters{
               ValidateAudience = false,
+              ClockSkew = TimeSpan.Zero
             };
             options.SaveToken = true;
           });

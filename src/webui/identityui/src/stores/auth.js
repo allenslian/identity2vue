@@ -57,19 +57,19 @@ export const authentication = {
                     case 401:
                         state.error = {
                             needRelogin: true,
-                            message: '验证失败，或者是访问令牌过期，请重新登录!'
+                            message: payload.message ? payload.message : '验证失败，或者是访问令牌过期，请重新登录!'
                         }
                         break;
                     case 403:
                         state.error = {
                             needRelogin: false,
-                            message: '暂时不能使用此功能，如果需要请您联系管理员!'
+                            message: payload.message ? payload.message : '暂时不能使用此功能，如果需要请您联系管理员!'
                         }
                         break;
                     case 405:
                         state.error = {
                             needRelogin: false,
-                            message: `服务器暂时不支持HTTP请求的[${payload.metadata.method}]方法`
+                            message: payload.message ? payload.message : `服务器暂时不支持HTTP请求的[${payload.metadata.method}]方法`
                         }
                         break;
                     case 500:

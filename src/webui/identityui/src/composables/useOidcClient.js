@@ -28,11 +28,11 @@ export function useOidcClient(router, {
 
         mgr.events.addAccessTokenExpired(() => {
             console.log("Access token expired.")
-            dispatch('clearTokens')
         })
 
         mgr.events.addSilentRenewError(err => {
             console.error("Silent renew error=>" + JSON.stringify(err))
+            dispatch('clearTokens')
             dispatch('notifyError', {
                 code: 401,
                 message: '重新获取access token失败，请重新登录!',

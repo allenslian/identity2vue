@@ -16,8 +16,10 @@
             userStore: new Oidc.WebStorageStateStore({ store: window.localStorage })
         }).signinSilentCallback().then(() => {
             console.log('renewing tokens in async!');
+        }).catch(err => {
+          console.log('silent renew error=>')
+          console.error(err)
         });
-        console.log('renewing tokens in sync!');
     </script>
   </body>
 </html>

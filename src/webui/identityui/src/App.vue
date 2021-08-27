@@ -37,15 +37,15 @@ export default {
     const router = useRouter();
     const closeDialog = () => {
       dialog.isVisible = false;
-      if (store.getters.error.needRelogin) {
+      if (store.getters.error && store.getters.error.needRelogin) {
         router.replace({ path: "/" });
       }
     };
     
     const unwatch = store.watch(
       (_state, getters) => getters.error,
-      (_ov, nv) => {
-        if (nv == null) {
+      (nv) => {
+        if (!nv) {
           return
         }
         console.log(nv)

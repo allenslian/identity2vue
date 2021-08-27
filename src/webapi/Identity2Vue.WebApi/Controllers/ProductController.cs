@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 using Identity2Vue.WebApi.Models;
 using Identity2Vue.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,7 @@ namespace Identity2Vue.WebApi.Controllers
     public async Task<IActionResult> AddProductAsync(
       [FromBody]CreateProductCommand command)
     {
-      await _service.AddProductAsync(command, "allen");
+      await _service.AddProductAsync(command, HttpContext.User.Claims.FirstOrDefault(m => m.Type == "sub").Value);
       return Ok();
     }
 
