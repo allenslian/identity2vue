@@ -2,7 +2,7 @@ import {
     WebStorageStateStore
 } from 'oidc-client'
 
-const authority = 'https://localhost:5001'
+const authority = process.env.VUE_APP_AUTHORITY
 export const oidcSettings = {
     userStore: new WebStorageStateStore({
         store: window.localStorage
@@ -15,7 +15,7 @@ export const oidcSettings = {
 
     response_type: 'code',
     scope: 'openid profile platform.api offline_access',
-    
+
     automaticSilentRenew: true,
     silent_redirect_uri: window.location.origin + '/silent-callback.html',
     accessTokenExpiringNotificationTime: 10,
@@ -26,4 +26,3 @@ export const oidcSettings = {
     filterProtocolClaims: true,
     response_mode: 'query'
 }
-

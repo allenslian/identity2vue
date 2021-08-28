@@ -3,7 +3,6 @@
 
 
 using Identity2Vue.IdentityServer.Services;
-using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +43,7 @@ namespace Identity2Vue.IdentityServer
 
                 //options.UserInteraction.LoginUrl = "/Home/Login";
                 //options.UserInteraction.LogoutUrl = "/Home/Logout";
-
+                
                 options.Csp.Level = IdentityServer4.Models.CspLevel.One;
                 options.Csp.AddDeprecatedHeader = true;
 
