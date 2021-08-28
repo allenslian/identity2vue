@@ -3,7 +3,7 @@ import {
 } from 'oidc-client'
 import {
     oidcSettings
-} from '../config'
+} from '../config/oidc'
 
 let mgr = null
 

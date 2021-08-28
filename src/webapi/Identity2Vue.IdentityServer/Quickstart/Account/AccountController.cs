@@ -2,6 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Identity2Vue.IdentityServer.Services;
 using IdentityModel;
 using IdentityServer4;
@@ -10,14 +13,10 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -132,17 +131,16 @@ namespace IdentityServerHost.Quickstart.UI
                         props = new AuthenticationProperties
                         {
                             IsPersistent = false,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(60))
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(60)),
                         };
                     };
 
                     // issue authentication cookie with subject ID and username
-                    var isuser = new IdentityServerUser(user.Id)
+                    var userAuthenticated = new IdentityServerUser(user.Id)
                     {
                         DisplayName = user.Username
                     };
-
-                    await HttpContext.SignInAsync(isuser, props);
+                    await HttpContext.SignInAsync(userAuthenticated, props);
 
                     if (context != null)
                     {

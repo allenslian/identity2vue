@@ -44,7 +44,12 @@ namespace Identity2Vue.WebApi.Controllers
     public async Task<IActionResult> AddProductAsync(
       [FromBody]CreateProductCommand command)
     {
-      await _service.AddProductAsync(command, HttpContext.User.Claims.FirstOrDefault(m => m.Type == "sub").Value);
+      var username = HttpContext.User.Claims.FirstOrDefault(m => m.Type == "name");
+      if (username == null || string.IsNullOrEmpty(username.Value))
+      {
+        return BadRequest("Not found login name!");
+      }
+      await _service.AddProductAsync(command, username.Value);
       return Ok();
     }
 

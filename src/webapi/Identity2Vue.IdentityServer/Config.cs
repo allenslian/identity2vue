@@ -9,6 +9,16 @@ namespace Identity2Vue.IdentityServer
 {
   public static class Config
   {
+    /// <summary>
+    /// Id token and access token lifetime
+    /// </summary>
+    private const int TokenLifetimeInMins = 1;
+
+    /// <summary>
+    /// Refresh token lifetime
+    /// </summary>
+    private const int RefreshTokenLifetimeInMins = 6;
+
     public static IEnumerable<IdentityResource> IdentityResources =>
         new IdentityResource[]
         {
@@ -19,7 +29,10 @@ namespace Identity2Vue.IdentityServer
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-          new ApiScope("platform.api", "platform api"),
+          new ApiScope("platform.api", "platform api")
+          {
+            UserClaims = new [] {"name"}
+          },
           new ApiScope("offline_access", "offline access")
         };
 
@@ -29,25 +42,27 @@ namespace Identity2Vue.IdentityServer
           new Client
           {
             ClientId = "webclient.vuejs",
-            ClientName = "webclient.vuejs",
-            AllowOfflineAccess = true,
-            AccessTokenType = AccessTokenType.Jwt,
+            ClientName = "webclient.vuejs",            
             RequireConsent = false,
-            AccessTokenLifetime = 60,
-            UpdateAccessTokenClaimsOnRefresh = true,
-            IdentityTokenLifetime = 60,
-            RefreshTokenExpiration = TokenExpiration.Sliding,
-            RefreshTokenUsage = TokenUsage.ReUse,
-            AbsoluteRefreshTokenLifetime = 360,
-            SlidingRefreshTokenLifetime = 180,
-
             RequireClientSecret = false,
+
             AllowedGrantTypes = GrantTypes.Code,
             RequirePkce = true,
 
+            AccessTokenType = AccessTokenType.Jwt,
+            AccessTokenLifetime = TokenLifetimeInMins * 60,
+            UpdateAccessTokenClaimsOnRefresh = true,
             AllowAccessTokensViaBrowser = true,
+            IdentityTokenLifetime = TokenLifetimeInMins * 60,
+            AllowOfflineAccess = true,
+            RefreshTokenExpiration = TokenExpiration.Sliding,
+            RefreshTokenUsage = TokenUsage.ReUse,
+            AbsoluteRefreshTokenLifetime = RefreshTokenLifetimeInMins * 60,
+            SlidingRefreshTokenLifetime = RefreshTokenLifetimeInMins * (60 / 2),
+            // AlwaysIncludeUserClaimsInIdToken = true,
+
             FrontChannelLogoutSessionRequired = true,
-            FrontChannelLogoutUri = "http://localhost:8080/#/sign-out-callback",
+            FrontChannelLogoutUri = "http://localhost:8080",
             
             RedirectUris = new List<string>
             {
@@ -56,7 +71,7 @@ namespace Identity2Vue.IdentityServer
             },
             PostLogoutRedirectUris = new List<string>
             {
-                "http://localhost:8080/#/sign-out-callback"
+                "http://localhost:8080"
             },
             AllowedCorsOrigins = new List<string>
             {
