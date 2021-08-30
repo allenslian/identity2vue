@@ -60,7 +60,7 @@ namespace Identity2Vue.WebApi
             services.AddScoped<IProductService, ProductService>();
 
             var origins = Configuration["Cors:Origins"]?.Split(',');
-            if (origins != null && origins.Length > 1)
+            if (origins != null && origins.Length > 0)
             {
                 services.AddCors(options =>
                 {
