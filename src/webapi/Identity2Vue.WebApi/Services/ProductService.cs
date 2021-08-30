@@ -13,7 +13,7 @@ namespace Identity2Vue.WebApi.Services
 
         Task<ProductItemDTO> GetProductByIdAsync(Guid id);
 
-        Task AddProductAsync(CreateProductCommand command, string user);
+        Task<string> AddProductAsync(CreateProductCommand command, string user);
 
         Task ChangeProductAsync(Guid id, ChangeProductCommand command);
 
@@ -55,23 +55,24 @@ namespace Identity2Vue.WebApi.Services
 
         public async Task<ProductItemDTO> GetProductByIdAsync(Guid id)
         {
-          var product = _products.FirstOrDefault(p => p.Id == id);
-          if (product == null)
-          {
-            return null;
-          }
-          return await Task.FromResult(new ProductItemDTO{
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            SalesPrice = product.SalesPrice
-          });
+            var product = _products.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                return null;
+            }
+            return await Task.FromResult(new ProductItemDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                SalesPrice = product.SalesPrice
+            });
         }
 
-        public Task AddProductAsync(CreateProductCommand command,
+        public Task<string> AddProductAsync(CreateProductCommand command,
           string user)
         {
-            _products.Add(new Product
+            var product = new Product
             {
                 Id = Guid.NewGuid(),
                 Name = command.Name,
@@ -79,8 +80,9 @@ namespace Identity2Vue.WebApi.Services
                 SalesPrice = command.SalesPrice,
                 DateCreated = DateTime.Now,
                 CreatedBy = user
-            });
-            return Task.CompletedTask;
+            };
+            _products.Add(product);
+            return Task.FromResult<string>(product.Id.ToString());
         }
 
         public Task ChangeProductAsync(Guid id, ChangeProductCommand command)
@@ -98,7 +100,7 @@ namespace Identity2Vue.WebApi.Services
 
         public Task RemoveProductAsync(Guid id)
         {
-          var product = _products.FirstOrDefault(m => m.Id == id);
+            var product = _products.FirstOrDefault(m => m.Id == id);
             if (product == null)
             {
                 throw new ArgumentException("不能找到此产品");

@@ -11,6 +11,7 @@ namespace Identity2Vue.WebApi.Controllers
 {
   [ApiController]
   [Route("products")]
+  [Produces("application/json")]
   public class ProductController : ControllerBase
   {
     private readonly IProductService _service;
@@ -41,7 +42,7 @@ namespace Identity2Vue.WebApi.Controllers
 
     [HttpPost, Route("")]
     [Authorize(Policy = "platform.scopes")]
-    public async Task<IActionResult> AddProductAsync(
+    public async Task<ActionResult<string>> AddProductAsync(
       [FromBody]CreateProductCommand command)
     {
       var username = HttpContext.User.Claims.FirstOrDefault(m => m.Type == "name");
@@ -49,25 +50,25 @@ namespace Identity2Vue.WebApi.Controllers
       {
         return BadRequest("Not found login name!");
       }
-      await _service.AddProductAsync(command, username.Value);
-      return Ok();
+      var id = await _service.AddProductAsync(command, username.Value);
+      return Ok(id);
     }
 
     [HttpPut, Route("{id}")]
     [Authorize(Policy = "platform.scopes")]
-    public async Task<IActionResult> ChangeProductAsync(Guid id,
+    public async Task<ActionResult<string>> ChangeProductAsync(Guid id,
       [FromBody]ChangeProductCommand command)
     {
       await _service.ChangeProductAsync(id, command);
-      return Ok();
+      return Ok(id.ToString());
     }
 
     [HttpDelete, Route("{id}")]
     [Authorize(Policy = "platform.scopes")]
-    public async Task<IActionResult> RemoveProductAsync(Guid id)
+    public async Task<ActionResult<string>> RemoveProductAsync(Guid id)
     {
       await _service.RemoveProductAsync(id);
-      return Ok();
+      return Ok(id.ToString());
     }
   }
 }
