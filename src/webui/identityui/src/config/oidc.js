@@ -20,7 +20,7 @@ export const oidcSettings = {
     silent_redirect_uri: window.location.origin + '/silent-callback.html',
     accessTokenExpiringNotificationTime: 10,
 
-    // revokeAccessTokenOnSignout: true,
+    revokeAccessTokenOnSignout: true,
 
     loadUserInfo: true,
     filterProtocolClaims: true,
