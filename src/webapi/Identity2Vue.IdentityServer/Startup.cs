@@ -31,8 +31,6 @@ namespace Identity2Vue.IdentityServer
 
             var builder = services.AddIdentityServer(options =>
             {
-                options.IssuerUri = Configuration["IdentityServer:Uri"];
-
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseInformationEvents = true;
@@ -54,7 +52,7 @@ namespace Identity2Vue.IdentityServer
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.Clients)
+            .AddInMemoryClients(Config.Clients(Configuration))
             .AddCredential(Configuration["Credentials:RsaPrivateKey"])
             .AddUserStore<UserStore>();
         }
