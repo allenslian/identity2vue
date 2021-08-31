@@ -7,7 +7,7 @@
             "name": ".NET Core Launch (identity server)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build server",
+            "preLaunchTask": "build idsserver",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/webapi/Identity2Vue.IdentityServer/bin/Debug/netcoreapp3.1/Identity2Vue.IdentityServer.dll",
             "args": [],
@@ -19,7 +19,8 @@
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_Kestrel__Certificates__Default__Path": "${workspaceFolder}/certs/localhost.pfx"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
@@ -32,7 +33,7 @@
             "name": ".NET Core Launch (identity api)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build api",
+            "preLaunchTask": "build idsapi",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/webapi/Identity2Vue.WebApi/bin/Debug/net5.0/Identity2Vue.WebApi.dll",
             "args": [],
@@ -44,7 +45,8 @@
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_Kestrel__Certificates__Default__Path": "${workspaceFolder}/certs/localhost.pfx"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
