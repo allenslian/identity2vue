@@ -59,6 +59,7 @@ export const authentication = {
                             needRelogin: true,
                             message: payload.message ? payload.message : '验证失败，或者是访问令牌过期，请重新登录!'
                         }
+                        this.clearTokens(state)
                         break;
                     case 403:
                         state.error = {
