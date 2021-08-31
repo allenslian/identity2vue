@@ -1,0 +1,77 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch (identity server)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build server",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/webapi/Identity2Vue.IdentityServer/bin/Debug/netcoreapp3.1/Identity2Vue.IdentityServer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/webapi/Identity2Vue.IdentityServer",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch (identity api)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build api",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/webapi/Identity2Vue.WebApi/bin/Debug/net5.0/Identity2Vue.WebApi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/webapi/Identity2Vue.WebApi",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "Launch via Yarn (identity ui)",
+            "request": "launch",
+            "runtimeArgs": [
+                "serve"
+            ],
+            "cwd": "${workspaceFolder}/src/webui/identityui",
+            "restart": true,
+            "runtimeExecutable": "yarn",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/src/webui/identityui/**",
+                "!**/node_modules/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
