@@ -75,16 +75,12 @@ namespace Identity2Vue.IdentityServer
                 RedirectUris = new List<string>
                 {
                     baseUris[0] + "/#/sign-in-callback",
-                    baseUris[0] + "/silent-callback.html"
+                    baseUris[0] + "/silent-callback.html",
+                    baseUris[1] + "/#/sign-in-callback",
+                    baseUris[1] + "/silent-callback.html"
                 },
-                PostLogoutRedirectUris = new List<string>
-                {
-                    baseUris[0]
-                },
-                AllowedCorsOrigins = new List<string>
-                {
-                    baseUris[0]
-                },
+                PostLogoutRedirectUris = new List<string>(baseUris),
+                AllowedCorsOrigins = new List<string>(baseUris),
                 AllowedScopes = new List<string>
                 {
                     "openid",
