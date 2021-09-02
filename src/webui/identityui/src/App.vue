@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100%">
     <router-view></router-view>
     <el-dialog
       :title="dialog.title"
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, reactive } from "vue"
-import { useRouter } from "vue-router"
-import { useStore } from "vuex"
-import debounce from "lodash.debounce"
+import { onMounted, onUnmounted, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import debounce from "lodash.debounce";
 
 export default {
   name: "App",
@@ -41,19 +41,19 @@ export default {
         router.replace({ path: "/" });
       }
     };
-    
+
     const unwatch = store.watch(
       (_state, getters) => getters.error,
       (nv) => {
         if (!nv) {
-          return
+          return;
         }
-        console.log(nv)
+        console.log(nv);
         debounce(() => {
           dialog.title = nv ? "错误提示" : "提示";
           dialog.message = nv ? nv.message : "";
           dialog.isVisible = true;
-        }, 500)()
+        }, 500)();
       }
     );
 
@@ -75,15 +75,23 @@ export default {
 </script>
 
 <style>
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
   color: #2c3e50;
   /*
   text-align: center;
   margin-top: 60px;
   */
+  height: 100%;
 }
 </style>

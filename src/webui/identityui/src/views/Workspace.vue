@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="height:100%">
     <el-header>
       <current-user></current-user>
     </el-header>
@@ -9,9 +9,12 @@
           <el-submenu index="1">
             <template #title>Product Management</template>
             <el-menu-item index="1-1" @click="navigateToProductList"
-              >Product List</el-menu-item
-            >
+              >Product List</el-menu-item>
           </el-submenu>
+          <el-menu-item index="2" @click="forwardToWebapp">
+            <i class="el-icon-menu"></i>
+            <span>Forward To WebApp</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
@@ -37,12 +40,17 @@ export default {
       router.push({ path: "/products" });
     };
 
+    const forwardToWebapp = () => {
+      window.location.href = "http://localhost:8081";
+    };
+
     onMounted(() => {
       console.log("Workspace onMounted is invoked!");
     });
 
     return {
       navigateToProductList,
+      forwardToWebapp,
     };
   },
 };
