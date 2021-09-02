@@ -71,6 +71,24 @@
             "type": "node"
         },
         {
+            "name": "Launch via Yarn (web app)",
+            "request": "launch",
+            "runtimeArgs": [
+                "serve"
+            ],
+            "cwd": "${workspaceFolder}/src/webui/webapp",
+            "restart": true,
+            "runtimeExecutable": "yarn",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/src/webui/webapp/**",
+                "!**/node_modules/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
