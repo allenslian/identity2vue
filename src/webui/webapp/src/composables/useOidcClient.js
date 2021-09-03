@@ -7,6 +7,9 @@ import {
 
 
 let mgr = null
+
+console.log('initialize mgr instance!');
+
 export function useOidcClient({replace}, {dispatch}) {
     if (mgr == null) {
         mgr = new UserManager(oidcSettings)
@@ -65,7 +68,7 @@ export function useOidcClient({replace}, {dispatch}) {
                     console.log("User signs in callback!")
                     dispatch('saveTokens', user).then(() => {
                         replace({
-                            path: '/workspace'
+                            path: '/'
                         })
                     })
                 } else {

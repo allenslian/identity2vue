@@ -10,7 +10,6 @@ import { onMounted } from "vue";
 export default {
   name: "App",
   setup() {
-
     onMounted(async () => {
       console.log("webapp App onMounted is invoked!");
     });
