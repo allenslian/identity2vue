@@ -41,7 +41,7 @@ export default {
     };
 
     const forwardToWebapp = () => {
-      window.location.href = "http://localhost:8081";
+      window.location.href = process.env.VUE_APP_WORLD_APP_BASE;
     };
 
     onMounted(() => {
