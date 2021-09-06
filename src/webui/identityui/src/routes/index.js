@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import SSO from '@/views/SSO.vue'
 import Callback from '../views/Callback.vue'
 
 const router = createRouter({
@@ -15,6 +16,11 @@ const router = createRouter({
       redirect: {
         name: 'home'
       },
+    },
+    {
+      name: 'sso',
+      path: '/sso',
+      component: SSO
     },
     {
       name: 'workspace',

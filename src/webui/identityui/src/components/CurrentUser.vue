@@ -1,7 +1,7 @@
 <template>
   <el-row align="middle">
     <el-col :span="12">
-      <h3 class="title">Hello</h3>
+      <h3 class="title">Home App</h3>
     </el-col>
     <el-col :span="12">
       <el-button
@@ -15,7 +15,8 @@
       <el-menu class="profile-button" mode="horizontal" v-else>
         <el-submenu index="1">
           <template #title>{{ profile ? profile.name : "NONE" }}</template>
-          <el-menu-item index="1-1" @click="logout">LOGOUT</el-menu-item>
+          <el-menu-item index="1-1" @click="goToWorldApp">Go To World App</el-menu-item>
+          <el-menu-item index="1-2" @click="logout">LOGOUT</el-menu-item>
         </el-submenu>
       </el-menu>
     </el-col>
@@ -43,6 +44,10 @@ export default {
       mgr.logout();
     };
 
+    const goToWorldApp = () => {
+      window.location.href = process.env.VUE_APP_WORLD_APP_BASE;
+    };
+
     onMounted(() => {
       console.log("CurrentUser onMounted is invoked!");
     });
@@ -52,6 +57,7 @@ export default {
       profile: computed(() => store.getters.profile),
       login,
       logout,
+      goToWorldApp
     };
   },
 };

@@ -16,10 +16,13 @@ export default {
     const mgr = useOidcClient(router, store);
 
     onMounted(async () => {
-      console.log("webapp SSO onMounted is invoked!");
+      console.log("home SSO onMounted is invoked!");
       console.log("relogin successfully!");
       mgr.login();
     });
   },
 };
 </script>
+
+<style>
+</style>

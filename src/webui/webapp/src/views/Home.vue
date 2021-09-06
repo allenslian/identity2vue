@@ -3,20 +3,22 @@
     <el-header>
       <el-row align="middle">
         <el-col :span="12">
-          <h3 class="title">World</h3>
+          <h3 class="title">World App</h3>
         </el-col>
         <el-col :span="12">
           <el-button
             type="primary"
             plain
-            style="float:right"
+            style="float: right"
             @click="login"
             v-if="!isAuthenticated"
-            >LOGIN</el-button>
-          <el-menu mode="horizontal" style="float:right;width:250px" v-else>
+            >LOGIN</el-button
+          >
+          <el-menu mode="horizontal" style="float: right; width: 250px" v-else>
             <el-sub-menu index="1">
               <template #title>{{ profile ? profile.name : "NONE" }}</template>
-              <el-menu-item index="1-1" @click="logout">LOGOUT</el-menu-item>
+              <el-menu-item index="1-1" @click="goToHomeApp">Go To Home App</el-menu-item>
+              <el-menu-item index="1-2" @click="logout">LOGOUT</el-menu-item>
             </el-sub-menu>
           </el-menu>
         </el-col>
@@ -79,6 +81,10 @@ export default {
       mgr.logout();
     };
 
+    const goToHomeApp = () => {
+      window.location.href = process.env.VUE_APP_HOME_APP_BASE;
+    };
+
     const { proxy } = getCurrentInstance();
     const getProducts = () => {
       proxy.$http
@@ -101,7 +107,7 @@ export default {
       if (isAuthenticated.value) {
         console.log("login successfully!");
         getProducts();
-      } 
+      }
       // else {
       //   console.log("relogin successfully!");
       //   mgr.login();
@@ -114,7 +120,8 @@ export default {
       products,
       getProducts,
       login,
-      logout
+      logout,
+      goToHomeApp
     };
   },
 };
