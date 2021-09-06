@@ -101,10 +101,11 @@ export default {
       if (isAuthenticated.value) {
         console.log("login successfully!");
         getProducts();
-      } else {
-        console.log("relogin successfully!");
-        mgr.login();
-      }
+      } 
+      // else {
+      //   console.log("relogin successfully!");
+      //   mgr.login();
+      // }
     });
 
     return {
