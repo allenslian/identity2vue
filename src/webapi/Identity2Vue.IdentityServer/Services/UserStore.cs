@@ -31,7 +31,7 @@ namespace Identity2Vue.IdentityServer.Services
                 ?? throw new ArgumentException("缺少PlatformBase设置项!");
             _platformBaseUri = new Uri(baseUri, UriKind.Absolute);
 
-            _expiration = config.GetValue<int>("Token.ExpirationInHours", 6);
+            _expiration = config.GetValue("Tokens.LifetimeInHours", Config.TokenDefaultLifetimeInHours);
         }
 
         public async Task<IUserIdentity> FindBySubjectIdAsync(string subjectId)

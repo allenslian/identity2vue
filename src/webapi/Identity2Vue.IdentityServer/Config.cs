@@ -14,12 +14,7 @@ namespace Identity2Vue.IdentityServer
         /// <summary>
         /// Id token and access token lifetime
         /// </summary>
-        private const int TokenLifetimeInMins = 1;
-
-        /// <summary>
-        /// Refresh token lifetime
-        /// </summary>
-        private const int RefreshTokenLifetimeInMins = 6;
+        public const int TokenDefaultLifetimeInHours = 6;
 
         public static IEnumerable<IdentityResource> IdentityResources =>
             new IdentityResource[]
@@ -37,59 +32,66 @@ namespace Identity2Vue.IdentityServer
               }
             };
 
-        public static IEnumerable<Client> Clients(IConfiguration configuration)
+        public static IEnumerable<Client> Clients(IConfiguration config)
         {
-            var baseUris = configuration.GetSection("ClientBaseUris")?.Get<string[]>();
-            if (baseUris == null || baseUris.Length == 0)
+            var tokenLifetimeInSeconds = (int)TimeSpan.FromHours(
+              config.GetValue("Tokens.LifetimeInHours", TokenDefaultLifetimeInHours)).TotalSeconds;
+
+            var clients = new List<Client>();
+            var options = new List<ClientOption>();
+            config.GetSection("Clients")?.Bind(options);
+            if (options == null || options.Count == 0)
             {
-                throw new ArgumentException("Missing ClientBaseUris section in configuration file!");
+                throw new ArgumentException("Missing Clients section in configuration file!");
             }
 
-            return new Client[]
+            foreach (var option in options)
             {
-              new Client
-              {
-                ClientId = "webclient.vuejs",
-                ClientName = "webclient.vuejs",
+              clients.Add(new Client{
+                ClientId = option.Id,
+                ClientName = option.Name,
                 RequireConsent = false,
                 RequireClientSecret = false,
 
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
-
                 AccessTokenType = AccessTokenType.Jwt,
-                AccessTokenLifetime = TokenLifetimeInMins * 60,
+                AccessTokenLifetime = tokenLifetimeInSeconds,
                 UpdateAccessTokenClaimsOnRefresh = true,
                 AllowAccessTokensViaBrowser = true,
-                IdentityTokenLifetime = TokenLifetimeInMins * 60,
+                IdentityTokenLifetime = tokenLifetimeInSeconds,
                 AllowOfflineAccess = true,
                 RefreshTokenExpiration = TokenExpiration.Sliding,
                 RefreshTokenUsage = TokenUsage.ReUse,
-                AbsoluteRefreshTokenLifetime = RefreshTokenLifetimeInMins * 60,
-                SlidingRefreshTokenLifetime = RefreshTokenLifetimeInMins * (60 / 2),
+                AbsoluteRefreshTokenLifetime = tokenLifetimeInSeconds * 7,  // 7 times
+                SlidingRefreshTokenLifetime = tokenLifetimeInSeconds - 300, //advanced 5 mins
                 // AlwaysIncludeUserClaimsInIdToken = true,
+                // FrontChannelLogoutSessionRequired = true,
+                // FrontChannelLogoutUri = baseUris[0],
 
-                FrontChannelLogoutSessionRequired = true,
-                FrontChannelLogoutUri = baseUris[0],
+                RedirectUris = option.RedirectUris,
+                PostLogoutRedirectUris = option.PostLogoutRedirectUris,
+                AllowedCorsOrigins = option.AllowedCorsOrigins,
+                AllowedScopes = option.AllowedScopes
+              });
+            }
 
-                RedirectUris = new List<string>
-                {
-                    baseUris[0] + "/#/sign-in-callback",
-                    baseUris[0] + "/silent-callback.html",
-                    baseUris[1] + "/#/sign-in-callback",
-                    baseUris[1] + "/silent-callback.html"
-                },
-                PostLogoutRedirectUris = new List<string>(baseUris),
-                AllowedCorsOrigins = new List<string>(baseUris),
-                AllowedScopes = new List<string>
-                {
-                    "openid",
-                    "profile",
-                    "platform.api",
-                    "offline_access"
-                }
-              }
-            };
+            return clients;
         }
+    }
+
+    internal class ClientOption
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string[] PostLogoutRedirectUris { get; set; }
+
+        public string[] RedirectUris { get; set; }
+
+        public string[] AllowedCorsOrigins { get; set; }
+
+        public string[] AllowedScopes { get; set; }
     }
 }
