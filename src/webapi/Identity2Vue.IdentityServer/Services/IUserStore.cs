@@ -15,19 +15,12 @@ namespace Identity2Vue.IdentityServer.Services
         Task<IUserIdentity> FindBySubjectIdAsync(string subjectId);
 
         /// <summary>
-        /// ValidateCredentialAsync verify whether username and password is correct.
+        /// FindByCredentialsAsync will return the user identity.
         /// </summary>
         /// <param name="username">your username</param>
         /// <param name="password">your password</param>
-        /// <returns>true is ok, false is failed</returns>
-        Task<bool> ValidateCredentialsAsync(string username, string password);
-
-        /// <summary>
-        /// FindByUsernameAsync finds active user by username
-        /// </summary>
-        /// <param name="username">your username</param>
-        /// <returns>IUserIdentity instance</returns>
-        Task<IUserIdentity> FindByUsernameAsync(string username);
+        /// <returns>it's null, or not null</returns>
+        Task<IUserIdentity> FindByCredentialsAsync(string username, string password);
     }
 
     public interface IUserIdentity

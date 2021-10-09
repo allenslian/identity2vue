@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using Identity2Vue.IdentityServer.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -17,6 +18,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IIdentityServerBuilder AddUserStore<T>(this IIdentityServerBuilder builder) where T : class, IUserStore
         {
+            builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
+            
             builder.Services.AddScoped<IUserStore, T>();
 
             builder.AddProfileService<DefaultProfileService>()

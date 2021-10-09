@@ -22,12 +22,12 @@ namespace Identity2Vue.IdentityServer.Services
 
         public async virtual Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            if (await Store.ValidateCredentialsAsync(context.UserName, context.Password))
+            var user = await Store.FindByCredentialsAsync(context.UserName, context.Password);
+            if (user != null)
             {
-                var user = await Store.FindByUsernameAsync(context.UserName);
                 context.Result = new GrantValidationResult(
-                    user.Id ?? throw new ArgumentException("Subject ID not set", nameof(user.Id)),
-                    OidcConstants.AuthenticationMethods.Password, user.Claims);
+                   user.Id ?? throw new ArgumentException("Subject ID not set", nameof(user.Id)),
+                   OidcConstants.AuthenticationMethods.Password, user.Claims);
             }
         }
     }
