@@ -15,6 +15,8 @@ namespace Identity2Vue.IdentityServer.Services
     {
         private readonly Uri _platformBaseUri;
 
+        private readonly int _expiration;
+
         private readonly IMemoryCache _cache;
 
         public UserStore(IMemoryCache cache, IConfiguration config)
@@ -28,6 +30,8 @@ namespace Identity2Vue.IdentityServer.Services
             var baseUri = config.GetValue<string>("Endpoints.PlatformBase", null)
                 ?? throw new ArgumentException("缺少PlatformBase设置项!");
             _platformBaseUri = new Uri(baseUri, UriKind.Absolute);
+
+            _expiration = config.GetValue<int>("Token.ExpirationInHours", 6);
         }
 
         public async Task<IUserIdentity> FindBySubjectIdAsync(string subjectId)
@@ -59,7 +63,7 @@ namespace Identity2Vue.IdentityServer.Services
                     }
                 };
                 _cache.Set($"users:{identity.Id}", identity, new MemoryCacheEntryOptions{
-                    SlidingExpiration = TimeSpan.FromHours(5)
+                    SlidingExpiration = TimeSpan.FromHours(_expiration)
                 });
                 return identity;
             }

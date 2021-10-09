@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -34,17 +35,18 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private readonly IConfiguration _config;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
+            IConfiguration config,
             IUserStore users)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
             _users = users ?? throw new ArgumentNullException(nameof(users));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
 
             _interaction = interaction;
             _clientStore = clientStore;
@@ -131,7 +133,8 @@ namespace IdentityServerHost.Quickstart.UI
                         props = new AuthenticationProperties
                         {
                             IsPersistent = false,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(60)),
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(
+                                TimeSpan.FromHours(_config.GetValue<int>("Token.ExpirationInHours", 6))),
                         };
                     };
 
