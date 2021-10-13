@@ -35,7 +35,7 @@ namespace Identity2Vue.IdentityServer
         public static IEnumerable<Client> Clients(IConfiguration config)
         {
             var tokenLifetimeInSeconds = (int)TimeSpan.FromHours(
-              config.GetValue("Tokens.LifetimeInHours", TokenDefaultLifetimeInHours)).TotalSeconds;
+              config.GetValue("Tokens:LifetimeInHours", TokenDefaultLifetimeInHours)).TotalSeconds;
 
             var clients = new List<Client>();
             var options = new List<ClientOption>();

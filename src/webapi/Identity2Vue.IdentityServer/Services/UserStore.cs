@@ -27,11 +27,11 @@ namespace Identity2Vue.IdentityServer.Services
                 throw new ArgumentNullException(nameof(config));
             }
 
-            var baseUri = config.GetValue<string>("Endpoints.PlatformBase", null)
+            var baseUri = config.GetValue<string>("Endpoints:PlatformBase", null)
                 ?? throw new ArgumentException("缺少PlatformBase设置项!");
             _platformBaseUri = new Uri(baseUri, UriKind.Absolute);
 
-            _expiration = config.GetValue("Tokens.LifetimeInHours", Config.TokenDefaultLifetimeInHours);
+            _expiration = config.GetValue("Tokens:LifetimeInHours", Config.TokenDefaultLifetimeInHours);
         }
 
         public async Task<IUserIdentity> FindBySubjectIdAsync(string subjectId)

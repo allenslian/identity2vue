@@ -135,7 +135,7 @@ namespace IdentityServerHost.Quickstart.UI
                             IsPersistent = false,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(
                                 TimeSpan.FromHours(
-                                    _config.GetValue("Tokens.LifetimeInHours", Identity2Vue.IdentityServer.Config.TokenDefaultLifetimeInHours))),
+                                    _config.GetValue("Tokens:LifetimeInHours", Identity2Vue.IdentityServer.Config.TokenDefaultLifetimeInHours))),
                         };
                     };
 
